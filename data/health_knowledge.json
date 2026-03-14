@@ -1,0 +1,63 @@
+[
+  {
+    "title": "COVID-19 Basic Information",
+    "text": "COVID-19 is a respiratory illness caused by the SARS-CoV-2 virus. Common symptoms include fever, dry cough, tiredness, and loss of taste or smell. Most people have mild to moderate illness and recover without hospital care. Seek urgent medical help if you have difficulty breathing, persistent chest pain, or confusion.",
+    "category": "Infectious Disease",
+    "url": "https://www.who.int/health-topics/coronavirus"
+  },
+  {
+    "title": "COVID-19 Prevention Measures",
+    "text": "To reduce the risk of COVID-19 infection, keep your vaccinations up to date, wash hands regularly with soap and water, use alcohol-based hand rub, avoid crowded and poorly ventilated spaces, wear a well-fitting mask in high-risk settings, and stay home if you feel unwell.",
+    "category": "Prevention",
+    "url": "https://www.who.int/health-topics/coronavirus#tab=tab_2"
+  },
+  {
+    "title": "COVID-19 Isolation Guidelines",
+    "text": "If you test positive for COVID-19, stay at home, isolate from others in your household as much as possible, wear a mask if you need to be around people, and follow local public health guidance on isolation duration. Monitor your symptoms and seek medical care if they worsen.",
+    "category": "Guidelines",
+    "url": "https://www.cdc.gov/coronavirus/2019-ncov/your-health"
+  },
+  {
+    "title": "Dengue Fever Overview",
+    "text": "Dengue is a viral infection transmitted by Aedes mosquitoes. Symptoms typically begin 4–10 days after infection and include high fever, severe headache, pain behind the eyes, muscle and joint pains, nausea, vomiting, swollen glands, and rash. Severe dengue is a medical emergency.",
+    "category": "Infectious Disease",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue"
+  },
+  {
+    "title": "Dengue Prevention and Mosquito Control",
+    "text": "Prevent dengue by avoiding mosquito bites: use mosquito repellents, wear long-sleeved clothing, use bed nets where appropriate, and remove standing water around homes to reduce mosquito breeding sites such as buckets, tires, and flower pots.",
+    "category": "Prevention",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue"
+  },
+  {
+    "title": "Diabetes Mellitus Type 2 Information",
+    "text": "Type 2 diabetes is a chronic condition that affects how your body turns food into energy. It is characterized by high blood sugar levels due to insulin resistance or insufficient insulin. Symptoms may include increased thirst, frequent urination, fatigue, blurred vision, and slow healing of wounds.",
+    "category": "Non-communicable Disease",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/diabetes"
+  },
+  {
+    "title": "Diabetes Prevention and Lifestyle",
+    "text": "To lower the risk of type 2 diabetes, maintain a healthy body weight, be physically active for at least 150 minutes per week, eat a balanced diet rich in fruits, vegetables, and whole grains, limit sugar and saturated fats, avoid tobacco use, and have regular health check-ups.",
+    "category": "Prevention",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/diabetes"
+  },
+  {
+    "title": "Hypertension (High Blood Pressure)",
+    "text": "Hypertension is when blood pressure is consistently too high. It often has no symptoms but can lead to serious complications such as heart attack, stroke, kidney disease, and vision loss. It is diagnosed by measuring blood pressure on several occasions.",
+    "category": "Non-communicable Disease",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/hypertension"
+  },
+  {
+    "title": "Hypertension Management and Prevention",
+    "text": "Prevent and manage high blood pressure by reducing salt intake, eating a diet rich in fruits and vegetables, maintaining a healthy weight, exercising regularly, avoiding tobacco and harmful use of alcohol, managing stress, and taking prescribed medications as directed by a healthcare provider.",
+    "category": "Prevention",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/hypertension"
+  },
+  {
+    "title": "General Hand Hygiene",
+    "text": "Hand hygiene is one of the most effective ways to prevent many infections. Wash your hands with soap and water for at least 20 seconds, especially after coughing, sneezing, using the toilet, before eating, and after caring for someone who is sick. If soap and water are not available, use an alcohol-based hand rub.",
+    "category": "Prevention",
+    "url": "https://www.who.int/gpsc/clean_hands_protection/en/"
+  }
+]
+
