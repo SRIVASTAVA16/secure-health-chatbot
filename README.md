@@ -99,3 +99,31 @@ cd "C:\Users\ashmi\OneDrive - Lovely Professional University\CapstoneProjectApp"
 
 # Install dependencies
 pip install -r requirements.txt
+
+Test in browser:
+
+API docs: http://localhost:8000/docs
+Health check: http://localhost:8000/health
+KB hash status: http://localhost:8000/kb/hash
+
+2. Frontend (React chatbot UI)
+In another terminal:
+
+cd "C:\Users\ashmi\OneDrive - Lovely Professional University\CapstoneProjectApp\frontend"
+npm install
+npm run dev
+Open the URL shown by Vite, e.g.:
+
+http://localhost:5173/ or http://localhost:5174/
+🧠 System Pipeline
+User question → frontend sends to /api/chat.
+NLP & TF‑IDF → text normalized and vectorized.
+ML classifier → predicts health topic/category.
+Similarity search → finds most relevant KB article.
+Security layer → KB hash/ledger verified at startup.
+Explainable AI → top TF‑IDF keywords returned & highlighted.
+Optional Gemini → used as fallback for health questions not covered by KB.
+Response → chatbot UI shows answer, source link, and important factors.
+⚠️ Disclaimer
+This chatbot is for public health awareness and education only.
+It does not provide medical diagnosis or treatment and must not be used for emergencies. For any serious or urgent symptoms, contact local emergency services or a qualified healthcare professional.
