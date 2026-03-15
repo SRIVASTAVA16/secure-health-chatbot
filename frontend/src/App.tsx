@@ -36,11 +36,11 @@ export function App() {
   const [kbStatus, setKbStatus] = useState<KnowledgeStatus | null>(null)
   const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState(false)
 
-  // Load previous conversation and settings from localStorage
+  // Load previous conversation and settings from sessionStorage (clears on new tab/visit)
   useEffect(() => {
     try {
-      const stored = window.localStorage.getItem('phc_messages')
-      const storedLang = window.localStorage.getItem('phc_language')
+      const stored = window.sessionStorage.getItem('phc_messages')
+      const storedLang = window.sessionStorage.getItem('phc_language')
       if (stored) {
         const parsed: Message[] = JSON.parse(stored)
         if (parsed.length > 0) {
@@ -60,8 +60,8 @@ export function App() {
   useEffect(() => {
     if (!hasLoadedFromStorage) return
     try {
-      window.localStorage.setItem('phc_messages', JSON.stringify(messages))
-      window.localStorage.setItem('phc_language', language)
+      window.sessionStorage.setItem('phc_messages', JSON.stringify(messages))
+      window.sessionStorage.setItem('phc_language', language)
     } catch {
       // ignore write errors
     }
