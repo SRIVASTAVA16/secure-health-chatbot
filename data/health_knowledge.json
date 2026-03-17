@@ -58,6 +58,18 @@
     "text": "Hand hygiene is one of the most effective ways to prevent many infections. Wash your hands with soap and water for at least 20 seconds, especially after coughing, sneezing, using the toilet, before eating, and after caring for someone who is sick. If soap and water are not available, use an alcohol-based hand rub.",
     "category": "Prevention",
     "url": "https://www.who.int/gpsc/clean_hands_protection/en/"
+  },
+  {
+    "title": "General Health Overview",
+    "text": "Health is a state of complete physical, mental and social well-being and not merely the absence of disease. Good health is maintained through a balanced diet, regular exercise, adequate sleep, and routine medical check-ups.",
+    "category": "General",
+    "url": "https://www.who.int/about/frequently-asked-questions"
+  },
+  {
+    "title": "General Infections and Pathogens",
+    "text": "An infection occurs when harmful microorganisms like bacteria, viruses, fungi, or parasites enter the body and multiply. Symptoms often include fever, fatigue, and inflammation. Prevention includes good hygiene, vaccination, and safe food practices.",
+    "category": "Infectious Disease",
+    "url": "https://www.who.int/health-topics/infectious-diseases"
   }
 ]
 

@@ -312,12 +312,11 @@ class HealthChatbotEngine:
                 "language": language,
             }
 
-        # Use local knowledge base when similarity is decent; otherwise try Gemini.
         answer_text: Optional[str] = None
         source_title: str = item.title
         source_url: Optional[str] = item.url
 
-        if score >= 0.08:
+        if score >= 0.15:
             answer_text = item.text
         else:
             gemini_answer = self._call_gemini(processed, language)
@@ -326,8 +325,13 @@ class HealthChatbotEngine:
                 source_title = "Gemini health assistant"
                 source_url = None
             else:
-                # Fallback to local KB even if similarity is low
-                answer_text = item.text
+                answer_text = (
+                    "I am a public health awareness bot. Your query is too broad "
+                    "or not in my database. Could you please be more specific? "
+                    "For example, are you asking about symptoms of a specific disease?"
+                )
+                source_title = "General Health Guidelines"
+                source_url = None
 
         answer_text = (
             f"{answer_text}\n\n"
