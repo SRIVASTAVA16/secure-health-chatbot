@@ -10,6 +10,9 @@ interface Message {
   keywords?: string[]
   sourceTitle?: string
   sourceUrl?: string | null
+  confidence?: number
+  responseHash?: string
+  kbVerified?: boolean
 }
 
 const API_URL = (import.meta.env.VITE_API_BASE || 'https://secure-health-chatbot-1.onrender.com') + '/api/chat'
@@ -118,6 +121,9 @@ export function App() {
         keywords: data.important_keywords,
         sourceTitle: data.source_title,
         sourceUrl: data.source_url,
+        confidence: data.confidence,
+        responseHash: data.response_hash,
+        kbVerified: data.kb_verified,
       }
       setMessages(prev => [...prev, botMessage])
     } catch (err) {
@@ -211,12 +217,36 @@ export function App() {
                       ))}
                     </div>
                   )}
+                  {msg.role === 'bot' && msg.confidence !== undefined && (
+                    <div className="meta-row">
+                      <span
+                        className={`confidence-badge ${
+                          msg.confidence > 80 ? 'high' : msg.confidence > 60 ? 'mid' : 'low'
+                        }`}
+                      >
+                        Confidence: {msg.confidence}%
+                      </span>
+                      {msg.kbVerified !== undefined && (
+                        <span className={`verified-badge ${msg.kbVerified ? 'ok' : 'warn'}`}>
+                          {msg.kbVerified ? '✔ Verified Source' : '⚠ Unverified Source'}
+                        </span>
+                      )}
+                      {msg.responseHash && (
+                        <span className="hash-badge" title={msg.responseHash}>
+                          🔒 {msg.responseHash.slice(0, 12)}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
             {loading && (
               <div className="message bot">
-                <div className="bubble typing">Thinking…</div>
+                <div className="bubble typing">
+                  <span className="dot" /><span className="dot" /><span className="dot" />
+                  {' '}Bot is typing…
+                </div>
               </div>
             )}
           </div>

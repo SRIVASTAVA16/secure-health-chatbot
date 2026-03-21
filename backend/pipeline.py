@@ -296,6 +296,11 @@ class HealthChatbotEngine:
         category = self._classify_category(processed)
         keywords = self._extract_keywords(query_vec)
 
+        # Confidence score from classifier
+        assert self.classifier is not None and self.label_encoder is not None
+        probs = self.classifier.predict_proba([processed])[0]
+        confidence = round(float(np.max(probs)) * 100, 1)
+
         if not self._is_health_query(processed, score, keywords):
             answer_text = (
                 "I am designed strictly for public health awareness. "
@@ -303,6 +308,7 @@ class HealthChatbotEngine:
                 "vaccination, and healthy lifestyle. I cannot answer questions "
                 "about sports, politics, exams, or other non‑health topics."
             )
+            response_hash = sha256(answer_text.encode()).hexdigest()
             return {
                 "answer": answer_text,
                 "source_title": "Health domain only",
@@ -310,6 +316,9 @@ class HealthChatbotEngine:
                 "important_keywords": [],
                 "detected_category": "out-of-domain",
                 "language": language,
+                "confidence": 0,
+                "response_hash": response_hash,
+                "kb_verified": self.verifier.valid,
             }
 
         answer_text: Optional[str] = None
@@ -340,6 +349,8 @@ class HealthChatbotEngine:
             f"personal diagnosis or treatment."
         )
 
+        response_hash = sha256(answer_text.encode()).hexdigest()
+
         return {
             "answer": answer_text,
             "source_title": source_title,
@@ -347,5 +358,8 @@ class HealthChatbotEngine:
             "important_keywords": keywords,
             "detected_category": category,
             "language": language,
+            "confidence": confidence,
+            "response_hash": response_hash,
+            "kb_verified": self.verifier.valid,
         }
 
