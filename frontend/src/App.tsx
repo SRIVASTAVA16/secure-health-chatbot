@@ -159,6 +159,9 @@ export function App() {
 
   return (
     <div className="app-shell">
+      <div className="top-banner">
+        🔐 Secure &nbsp;|&nbsp; ✔ Verified &nbsp;|&nbsp; 🧠 Explainable AI Health System
+      </div>
       <header className="app-header">
         <div>
           <h1>Secure Public Health Chatbot</h1>
@@ -197,7 +200,7 @@ export function App() {
                     : msg.text}
                   {msg.role === 'bot' && msg.sourceTitle && (
                     <div className="source">
-                      Source:{' '}
+                      {msg.kbVerified ? '✔ Verified Source: ' : 'Source: '}
                       {msg.sourceUrl ? (
                         <a href={msg.sourceUrl} target="_blank" rel="noreferrer">
                           {msg.sourceTitle}
@@ -233,7 +236,7 @@ export function App() {
                       )}
                       {msg.responseHash && (
                         <span className="hash-badge" title={msg.responseHash}>
-                          🔒 {msg.responseHash.slice(0, 12)}
+                          🔐 {msg.responseHash.slice(0, 12)}
                         </span>
                       )}
                     </div>
