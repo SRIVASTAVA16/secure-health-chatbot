@@ -15,8 +15,15 @@ interface Message {
   kbVerified?: boolean
 }
 
-const API_URL = (import.meta.env.VITE_API_BASE || 'https://secure-health-chatbot-1.onrender.com') + '/api/chat'
-const KB_STATUS_URL = (import.meta.env.VITE_API_BASE || 'https://secure-health-chatbot-1.onrender.com') + '/kb/hash'
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://secure-health-chatbot-1.onrender.com'
+const API_URL = API_BASE + '/api/chat'
+const KB_STATUS_URL = API_BASE + '/kb/hash'
+const HEALTH_URL = API_BASE + '/health'
+
+// Keep Render backend alive by pinging every 10 minutes
+const keepAlive = () => { fetch(HEALTH_URL).catch(() => {}) }
+setInterval(keepAlive, 10 * 60 * 1000)
+keepAlive()
 
 interface KnowledgeStatus {
   current_hash?: string | null
