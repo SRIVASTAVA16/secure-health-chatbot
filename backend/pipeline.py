@@ -115,7 +115,7 @@ class HealthChatbotEngine:
                 category=item["category"],
                 url=item.get("url", ""),
             )
-            for i, item in enumerate(raw[:3000])  # cap at 3000 to stay within 512MB
+            for i, item in enumerate(raw[:1500])  # cap at 1500 to stay within memory/time limits
         ]
 
         documents = [f"{item.title}. {item.text}" for item in self.knowledge_items]
