@@ -115,7 +115,7 @@ class HealthChatbotEngine:
                 category=item["category"],
                 url=item.get("url", ""),
             )
-            for i, item in enumerate(raw)
+            for i, item in enumerate(raw[:3000])  # cap at 3000 to stay within 512MB
         ]
 
         documents = [f"{item.title}. {item.text}" for item in self.knowledge_items]
@@ -123,7 +123,7 @@ class HealthChatbotEngine:
         self.vectorizer = TfidfVectorizer(
             ngram_range=(1, 2),
             stop_words="english",
-            max_features=5000,
+            max_features=2000,
         )
         self.tfidf_matrix = self.vectorizer.fit_transform(documents)
 
