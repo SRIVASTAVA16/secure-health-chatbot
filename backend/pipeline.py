@@ -48,8 +48,10 @@ class KnowledgeVerifier:
         return sha256(content).hexdigest()
 
     def verify_or_initialize(self) -> None:
-        with open(self.data_path, "rb") as f:
-            content = f.read()
+        # Normalize by parsing and re-serializing to avoid CRLF/LF differences
+        with open(self.data_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        content = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
         self.current_hash = self._compute_hash(content)
 
         # Initialize ledger on first run
