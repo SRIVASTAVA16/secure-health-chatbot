@@ -288,11 +288,12 @@ export function App() {
           <section className="info-card">
             <h2>Knowledge base topics</h2>
             <ul className="pill-list">
-              <li>General hygiene & handwashing</li>
-              <li>Respiratory illness & COVID-19</li>
-              <li>Dengue & mosquito-borne disease</li>
-              <li>Diabetes & lifestyle</li>
-              <li>Hypertension & heart health</li>
+              <li>Symptoms & diagnosis</li>
+              <li>Treatments & medications</li>
+              <li>Infectious diseases</li>
+              <li>Prevention & vaccines</li>
+              <li>Chronic conditions</li>
+              <li>General health & lifestyle</li>
             </ul>
           </section>
 
