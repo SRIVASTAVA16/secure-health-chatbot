@@ -287,7 +287,8 @@ class HealthChatbotEngine:
             texts = [p.get("text", "") for p in parts if isinstance(p, dict)]
             combined = "\n".join(t for t in texts if t.strip())
             return combined or None
-        except Exception:
+        except Exception as e:
+            print(f"[Gemini error] {e}")
             return None
 
     def answer_question(self, message: str, language: str = "en") -> Dict[str, Any]:
@@ -325,7 +326,7 @@ class HealthChatbotEngine:
         source_title: str = item.title
         source_url: Optional[str] = item.url
 
-        if score >= 0.15:
+        if score >= 0.05:
             answer_text = item.text
         else:
             gemini_answer = self._call_gemini(processed, language)
