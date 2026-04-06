@@ -328,9 +328,10 @@ class HealthChatbotEngine:
         source_title: str = item.title
         source_url: Optional[str] = item.url
 
-        if score >= 0.05:
+        if score >= 0.15:
             answer_text = item.text
         else:
+            print(f"[Gemini] Low score ({score:.3f}) for: {processed[:60]}")
             gemini_answer = self._call_gemini(processed, language)
             if gemini_answer:
                 answer_text = gemini_answer
