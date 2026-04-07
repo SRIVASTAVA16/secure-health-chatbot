@@ -280,11 +280,17 @@ class HealthChatbotEngine:
                 answer_text = general
                 source_title = "General Symptom Advice"
 
-        # 2. High-confidence KB match
+        # 2. High-confidence KB match — only use if title is relevant to query
         if not answer_text and score >= 0.20:
-            answer_text = item.text[:500]
-            source_title = item.title
-            source_url = item.url or None
+            # Check title relevance: at least one query word must appear in the matched title
+            query_words = set(re.sub(r'[^\w\s]', '', processed).split())
+            title_words = set(item.title.lower().split())
+            stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i", "have", "my", "do", "does", "can", "be"}
+            query_words -= stop
+            if query_words & title_words:
+                answer_text = item.text[:500]
+                source_title = item.title
+                source_url = item.url or None
 
         # 3. Gemini fallback
         if not answer_text:
