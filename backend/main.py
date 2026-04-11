@@ -54,7 +54,13 @@ def chat(request: ChatRequest):
     return ChatResponse(**result)
 
 
-@app.get("/kb/hash", response_model=KnowledgeStatusResponse)
+@app.get("/test/gemini")
+def test_gemini():
+    result = engine._call_gemini("What are symptoms of dengue fever?", "en")
+    return {"gemini_response": result, "api_key_set": bool(engine.gemini_api_key)}
+
+
+
 def knowledge_hash() -> KnowledgeStatusResponse:
     """
     Helper endpoint to expose the current knowledge base hash information.
