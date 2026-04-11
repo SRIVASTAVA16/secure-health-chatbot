@@ -228,7 +228,27 @@ class HealthChatbotEngine:
             if answer_text:
                 source_title = "General Symptom Advice"
 
-        # Step 2: KB search with title relevance check
+        # Step 2: Direct title search first (exact keyword match in title)
+        if not answer_text:
+            query_words = set(re.sub(r'[^\w\s]', '', processed).split())
+            stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i",
+                    "have", "my", "do", "does", "can", "be", "about", "tell", "me"}
+            query_words -= stop
+            best_item = None
+            best_overlap = 0
+            for ki in self.knowledge_items:
+                title_words = set(ki.title.lower().split())
+                overlap = len(query_words & title_words)
+                if overlap > best_overlap:
+                    best_overlap = overlap
+                    best_item = ki
+            if best_item and best_overlap >= 1:
+                answer_text = best_item.text
+                source_title = best_item.title
+                source_url = best_item.url or None
+                confidence = 80
+
+        # Step 3: Cosine similarity KB search
         if not answer_text:
             item, score = self._kb_search(processed)
             confidence = round(score * 100, 1)
@@ -236,8 +256,6 @@ class HealthChatbotEngine:
                 answer_text = item.text
                 source_title = item.title
                 source_url = item.url or None
-            else:
-                confidence = 0
 
         # Step 3: Gemini fallback
         if not answer_text:
@@ -260,7 +278,7 @@ class HealthChatbotEngine:
             "important_keywords": keywords,
             "detected_category": "Health",
             "language": language,
-            "confidence": round(score * 100, 1) if 'score' in dir() else 50,
+            "confidence": confidence if 'confidence' in dir() else 50,
             "response_hash": sha256(answer_text.encode()).hexdigest(),
             "kb_verified": self.verifier.valid,
         }
