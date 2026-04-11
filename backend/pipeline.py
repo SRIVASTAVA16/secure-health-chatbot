@@ -272,20 +272,31 @@ class HealthChatbotEngine:
         source_url: Optional[str] = None
         confidence = round(score * 100, 1)
 
+        # Known diseases — always use Gemini for these, KB is too sparse
+        KNOWN_DISEASES = {
+            "dengue", "malaria", "typhoid", "tuberculosis", "tb", "asthma",
+            "pneumonia", "cholera", "hepatitis", "hiv", "aids", "cancer",
+            "stroke", "arthritis", "epilepsy", "migraine", "anemia", "anaemia",
+            "chickenpox", "measles", "mumps", "rabies", "ebola", "zika",
+            "flu", "influenza", "polio", "tetanus", "meningitis", "sepsis",
+            "appendicitis", "kidney stone", "gallstone", "ulcer", "eczema",
+            "psoriasis", "scabies", "ringworm", "jaundice", "leptospirosis",
+        }
+        query_has_disease = any(d in processed for d in KNOWN_DISEASES)
+
         # 1. Intent detection — handle "I have fever" type queries first
         intent = self._detect_intent(processed)
-        if intent == "symptom_advice":
+        if intent == "symptom_advice" and not query_has_disease:
             general = self._check_general_symptoms(processed)
             if general:
                 answer_text = general
                 source_title = "General Symptom Advice"
 
-        # 2. High-confidence KB match — only use if title is relevant to query
-        if not answer_text and score >= 0.20:
-            # Check title relevance: at least one query word must appear in the matched title
+        # 2. High-confidence KB match — skip if query contains a known disease name
+        if not answer_text and not query_has_disease and score >= 0.20:
             query_words = set(re.sub(r'[^\w\s]', '', processed).split())
             title_words = set(item.title.lower().split())
-            stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i", "have", "my", "do", "does", "can", "be"}
+            stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i", "have", "my", "do", "does", "can", "be", "symptoms", "symptom"}
             query_words -= stop
             if query_words & title_words:
                 answer_text = item.text[:500]
