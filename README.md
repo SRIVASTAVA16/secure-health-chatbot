@@ -1,6 +1,6 @@
 # 🏥 Secure AI-Driven Public Health Chatbot
 
-A secure, explainable public health awareness chatbot that answers questions about diseases, symptoms, prevention, and healthy lifestyle using a verified knowledge base and a machine-learning pipeline.
+A secure, explainable public health awareness chatbot that answers questions about diseases, symptoms, prevention, and healthy lifestyle using a verified knowledge base, machine learning, and Google Gemini AI fallback.
 
 > ⚠️ This system is designed for public health communication and **does not** provide medical diagnosis or treatment.
 
@@ -19,12 +19,16 @@ A secure, explainable public health awareness chatbot that answers questions abo
 ## ✨ Key Features
 
 - **Interactive Chat UI** — React + TypeScript, two-column layout with chat and system pipeline panel
+- **Voice Input** — Speak your health question using the built-in mic button (Web Speech API)
 - **Language Support** — English / Hindi (Roman) selector
 - **Session-based Chat** — Fresh chat on every new visit; continues on page refresh
 - **Keyword Highlighting** — Important health terms highlighted in every answer
+- **Intent Detection** — Detects personal symptom queries ("I have fever") and responds with general advice
 - **Health-only Guardrail** — Rejects non-health queries (sports, politics, etc.)
 - **Explainable AI** — Returns top TF-IDF keywords as "important factors"
 - **Verified Knowledge Base** — SHA-256 hash integrity check on the KB file
+- **Gemini AI Fallback** — Google Gemini API answers queries not covered by local KB
+- **Confidence Score** — Each response shows prediction confidence
 - **Safety Disclaimer** — Every response reminds users it is not a medical diagnosis tool
 
 ---
@@ -33,10 +37,12 @@ A secure, explainable public health awareness chatbot that answers questions abo
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React, TypeScript, Vite |
+| Frontend | React 18, TypeScript, Vite |
 | Backend | FastAPI, Uvicorn |
-| ML / NLP | scikit-learn (TF-IDF + Logistic Regression) |
-| Storage | JSON knowledge base (no user data stored) |
+| ML / NLP | scikit-learn (TF-IDF + Cosine Similarity) |
+| AI Fallback | Google Gemini API (gemini-2.0-flash) |
+| Knowledge Base | JSON (14,000+ medical Q&A entries from Kaggle) |
+| Security | SHA-256 hash verification (response + KB integrity) |
 | Deployment | Netlify (frontend) + Render (backend) |
 
 ---
@@ -45,13 +51,14 @@ A secure, explainable public health awareness chatbot that answers questions abo
 
 ```
 User question
-    → NLP preprocessing (normalize, lowercase)
-    → TF-IDF vectorization
-    → Logistic Regression classifier (predict health topic)
-    → Knowledge base lookup (find best matching article)
-    → KB hash integrity check
+    → Health domain guardrail (reject non-health queries)
+    → Intent detection (personal symptom vs. disease query)
+    → Direct KB title search (keyword matching)
+    → TF-IDF + Cosine Similarity (semantic search)
+    → KB hash integrity check (SHA-256)
+    → Gemini AI fallback (if KB confidence is low)
     → Explainable AI (top TF-IDF keywords highlighted)
-    → Response with answer, source, and important factors
+    → Response with answer, source, confidence score, and keywords
 ```
 
 ---
@@ -61,9 +68,9 @@ User question
 ### 1. Backend
 
 ```bash
-cd backend
 pip install -r requirements.txt
-uvicorn app:app --reload
+cd backend
+python -m uvicorn main:app --reload --port 8000
 ```
 
 - API docs: http://localhost:8000/docs
@@ -79,26 +86,36 @@ npm run dev
 
 Open: http://localhost:5173
 
+> Set `VITE_API_BASE=http://localhost:8000` in `frontend/.env` to use local backend.
+
 ---
 
 ## 📁 Project Structure
 
 ```
 ├── backend/
-│   ├── app.py                  # FastAPI app + chat endpoint
-│   ├── nlp_model.py            # TF-IDF + Logistic Regression pipeline
-│   ├── security.py             # KB hash verification
-│   ├── requirements.txt
-│   └── data/
-│       ├── health_knowledge.json   # Curated health KB
-│       └── health_qa.csv           # Training data for classifier
+│   ├── main.py               # FastAPI app + endpoints
+│   └── pipeline.py           # ML pipeline, KB search, Gemini fallback
+├── data/
+│   ├── health_knowledge.json # 14,000+ medical Q&A knowledge base
+│   └── health_knowledge.ledger # SHA-256 integrity ledger
 ├── frontend/
 │   ├── src/
-│   │   └── App.tsx             # React chatbot UI
+│   │   ├── App.tsx           # React chatbot UI
+│   │   └── style.css         # Styles
 │   └── index.html
-├── netlify.toml                # Netlify deploy config
+├── requirements.txt          # Python dependencies
+├── netlify.toml              # Netlify deploy config
 └── README.md
 ```
+
+---
+
+## 🔐 Security Features
+
+- **KB Integrity Verification** — SHA-256 hash of the knowledge base is stored in a ledger file. On every startup, the hash is recomputed and compared. If tampered, the server refuses to start.
+- **Response Hashing** — Every response is hashed with SHA-256 for auditability.
+- **Health Domain Guardrail** — Strict filtering ensures only health-related queries are answered.
 
 ---
 
