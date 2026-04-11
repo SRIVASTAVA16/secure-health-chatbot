@@ -292,8 +292,8 @@ class HealthChatbotEngine:
                 answer_text = general
                 source_title = "General Symptom Advice"
 
-        # 2. High-confidence KB match — skip if query contains a known disease name
-        if not answer_text and not query_has_disease and score >= 0.20:
+        # 2. KB match — for known diseases, require high score + title match
+        if not answer_text and score >= 0.20:
             query_words = set(re.sub(r'[^\w\s]', '', processed).split())
             title_words = set(item.title.lower().split())
             stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i", "have", "my", "do", "does", "can", "be", "symptoms", "symptom"}
