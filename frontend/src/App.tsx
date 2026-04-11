@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './style.css'
 
 type Role = 'user' | 'bot'
@@ -95,6 +95,36 @@ export function App() {
     .filter(m => m.role === 'user')
     .slice(-10)
     .reverse()
+
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
+  const startVoice = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert('Voice input is not supported in this browser. Please use Chrome.')
+      return
+    }
+    const recognition = new SpeechRecognition()
+    recognition.lang = language === 'hi' ? 'hi-IN' : 'en-US'
+    recognition.interimResults = false
+    recognition.maxAlternatives = 1
+    recognition.onstart = () => setIsListening(true)
+    recognition.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript
+      setInput(transcript)
+      setIsListening(false)
+    }
+    recognition.onerror = () => setIsListening(false)
+    recognition.onend = () => setIsListening(false)
+    recognitionRef.current = recognition
+    recognition.start()
+  }
+
+  const stopVoice = () => {
+    recognitionRef.current?.stop()
+    setIsListening(false)
+  }
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -268,6 +298,14 @@ export function App() {
               value={input}
               onChange={e => setInput(e.target.value)}
             />
+            <button
+              type="button"
+              className={`mic-btn ${isListening ? 'listening' : ''}`}
+              onClick={isListening ? stopVoice : startVoice}
+              title={isListening ? 'Stop listening' : 'Speak your question'}
+            >
+              {isListening ? '⏹' : '🎤'}
+            </button>
             <button type="submit" disabled={loading || !input.trim()}>
               Send
             </button>
