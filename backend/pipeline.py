@@ -228,25 +228,30 @@ class HealthChatbotEngine:
             if answer_text:
                 source_title = "General Symptom Advice"
 
-        # Step 2: Direct title search first (exact keyword match in title)
+        # Step 2: Direct title search — disease name must match, not just generic words
         if not answer_text:
             query_words = set(re.sub(r'[^\w\s]', '', processed).split())
             stop = {"what", "is", "are", "the", "how", "to", "of", "a", "an", "i",
-                    "have", "my", "do", "does", "can", "be", "about", "tell", "me"}
-            query_words -= stop
-            best_item = None
-            best_overlap = 0
-            for ki in self.knowledge_items:
-                title_words = set(ki.title.lower().split())
-                overlap = len(query_words & title_words)
-                if overlap > best_overlap:
-                    best_overlap = overlap
-                    best_item = ki
-            if best_item and best_overlap >= 1:
-                answer_text = best_item.text
-                source_title = best_item.title
-                source_url = best_item.url or None
-                confidence = 80
+                    "have", "my", "do", "does", "can", "be", "about", "tell", "me",
+                    "symptoms", "symptom", "disease", "treatment", "prevent", "prevention",
+                    "causes", "cause", "cure", "information", "info", "explain", "definition"}
+            meaningful_words = query_words - stop
+            if meaningful_words:
+                best_item = None
+                best_overlap = 0
+                for ki in self.knowledge_items:
+                    title_words = set(ki.title.lower().split())
+                    # Remove stop words from title too for fair comparison
+                    title_meaningful = title_words - stop
+                    overlap = len(meaningful_words & title_meaningful)
+                    if overlap > best_overlap:
+                        best_overlap = overlap
+                        best_item = ki
+                if best_item and best_overlap >= 1:
+                    answer_text = best_item.text
+                    source_title = best_item.title
+                    source_url = best_item.url or None
+                    confidence = 80
 
         # Step 3: Cosine similarity KB search
         if not answer_text:
